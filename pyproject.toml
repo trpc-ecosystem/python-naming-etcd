@@ -1,0 +1,66 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "trpc_naming_etcd/version.py"
+
+[project]
+name = "trpc-naming-etcd"
+dynamic = ["version"]
+description = "etcd naming (registry, discovery, selector) plugin for the tRPC Python framework"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "tRPC Group" }]
+keywords = ["trpc", "etcd", "naming", "registry", "discovery", "selector", "python"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "trpc-python ; sys_platform != 'win32'",
+    "etcd3>=0.12.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "yapf",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["trpc_naming_etcd"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "trpc_naming_etcd",
+    "tests",
+    "examples",
+    "README.md",
+    "README.zh_CN.md",
+    "CHANGELOG.md",
+    "LICENSE",
+]
+
+[tool.uv]
+package = true
+
+[tool.yapf]
+based_on_style = "pep8"
+column_limit = 120
+indent_width = 4
+split_before_logical_operator = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q"
+markers = [
+    "integration: requires a real etcd server at 127.0.0.1:2379",
+]
