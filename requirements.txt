@@ -1,0 +1,3 @@
+etcd3>=0.12.0
+
+trpc-python ; sys_platform != 'win32'

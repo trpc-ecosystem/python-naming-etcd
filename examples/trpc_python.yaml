@@ -1,0 +1,42 @@
+global:
+  namespace: Development
+  env_name: test
+
+server:
+  app: test
+  server: helloworld
+  service:
+    - name: trpc.test.helloworld.Greeter
+      protocol: trpc
+      network: tcp
+      ip: 127.0.0.1
+      port: 10001
+      registry: etcd
+
+plugins:
+  registry:
+    etcd:
+      address: 127.0.0.1:2379
+      timeout: 5
+      prefix: /registry
+      service:
+        - name: trpc.test.helloworld.Greeter
+          ttl: 10
+          weight: 100
+          metadata:
+            tags: helloworld
+  selector:
+    etcd:
+      address: 127.0.0.1:2379
+      timeout: 5
+      prefix: /registry
+      load_balance:
+        name: round_robin
+
+client:
+  service:
+    - name: trpc.test.helloworld.Greeter
+      target: etcd://trpc.test.helloworld.Greeter
+      network: tcp
+      protocol: trpc
+      timeout: 1000
